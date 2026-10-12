@@ -1,0 +1,6 @@
+0 = vacio
+1 = pared
+2 = robot
+3 = plantas
+4 = fertilizante
+5 = avion
