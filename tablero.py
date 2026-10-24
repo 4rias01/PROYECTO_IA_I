@@ -1,21 +1,23 @@
+from readfile import Readfile
+
 class Tablero:
     __slots__ = ("pos_robot", "count_plants", "nomenc", "tablero",
                  "pos_plantas", "pos_fertilizante", "pos_avion")
     
-    def __init__(self, nomenc, matrix) -> None:
-        self.nomenc = nomenc
+    def __init__(self, matrix) -> None:
         self.tablero = matrix
         self.pos_robot, self.count_plants = self.helper(matrix)
     
     def helper(self, mat: list[list[int]]):
         count_plants = 0
         pos_robot = []
+        nomenc = Readfile().get_nomenc()
 
         for i in range(10):
             for j in range(10):
-                if mat[i][j] == self.nomenc["ROBOT"]:
+                if mat[i][j] == nomenc["ROBOT"]:
                     pos_robot = (j, i)
-                elif mat[i][j] == self.nomenc["PLANTA"]:
+                elif mat[i][j] == nomenc["PLANTA"]:
                     count_plants += 1
         return (pos_robot, count_plants)
 
@@ -23,13 +25,15 @@ class Tablero:
         pos_plantas = []
         pos_fertilizante = []
         pos_avion = []
+        nomenc = Readfile().get_nomenc()
+
         for i in range(10):
             for j in range(10):
-                if mat[i][j] == self.nomenc["PLANTA"]:
+                if mat[i][j] == nomenc["PLANTA"]:
                     pos_plantas.append((j, i))
-                elif mat[i][j] == self.nomenc["FERTILIZANTE"]:
+                elif mat[i][j] == nomenc["FERTILIZANTE"]:
                     pos_fertilizante= (j, i)
-                elif mat[i][j] == self.nomenc["AVION"]:
+                elif mat[i][j] == nomenc["AVION"]:
                     pos_avion = (j, i)
         self.pos_plantas = pos_plantas
         self.pos_fertilizante= pos_fertilizante
@@ -49,9 +53,6 @@ class Tablero:
 
     def get_cant_plantas(self):
         return self.count_plants
-
-    def get_nomenc(self):
-        return self.nomenc
 
     def get_posicion(self, posy, posx):
         return self.tablero[posy][posx]

@@ -1,10 +1,10 @@
-
+from readfile import Readfile
 # initial_state[pos_robot][combustible][fertilizante][cant_plantas]
 # matrix[n][m][30][2][plantas]
 
 # hay un prolema, y es que si pasa por una planta que ya fue regada
 class State:
-    def __init__(self, posx_robot, posy_robot, cant_plantas, nomenc):
+    def __init__(self, posx_robot, posy_robot, cant_plantas):
         self.costo_paso = 1
         self.costo_acum = 0
         self.plantas_regadas = set()
@@ -15,7 +15,6 @@ class State:
         self.posx_robot = posx_robot
         self.posy_robot = posy_robot
         self.cant_plantas = cant_plantas
-        self.nomenc = nomenc
 
     def get_state(self):
         return (self.posx_robot, self.posy_robot, self.cant_combustible,
@@ -56,12 +55,13 @@ class State:
         return self.cant_plantas == 0
 
     def change_state(self, casilla):
+        nomenc = Readfile().get_nomenc()
         opciones = {
-            self.nomenc["VACIO"]  : lambda: "",
-            self.nomenc["ROBOT"]  : lambda: "",
-            self.nomenc["PLANTA"] : self.usar_fertilizante,
-            self.nomenc["FERTILIZANTE"] : self.coger_fertilizante,
-            self.nomenc["AVION"]  : self.coger_combustible
+            nomenc["VACIO"]  : lambda: "",
+            nomenc["ROBOT"]  : lambda: "",
+            nomenc["PLANTA"] : self.usar_fertilizante,
+            nomenc["FERTILIZANTE"] : self.coger_fertilizante,
+            nomenc["AVION"]  : self.coger_combustible
         }
 
         opciones.get(casilla, lambda: "error")()
