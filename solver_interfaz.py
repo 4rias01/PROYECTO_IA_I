@@ -27,8 +27,6 @@ class GameState:
         return (robot_y, robot_x, count_plants)
 
 class Solver(ABC):
-
-
     def game_state(self, matrix: list[list[int]]) -> GameState:
         return GameState(matrix)
         
