@@ -24,7 +24,8 @@ class SolverDfs(Solver):
                 continue
             self.visitados.add(tupla_estado)
 
-            for nueva_x, nueva_y in self.casillas_vecinas(estado_actual):
+            # Se apilan al revés para que el operador preferido quede encima y salga primero
+            for nueva_x, nueva_y in reversed(self.casillas_vecinas(estado_actual)):
 
                 # 1. Clonar el estado actual
                 nuevo_estado = copy.deepcopy(estado_actual)

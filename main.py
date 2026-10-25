@@ -3,8 +3,9 @@ from readfile import Readfile
 from tablero import Tablero
 from solvers.solverDfs import SolverDfs
 from solvers.solverBfs import SolverBfs
+from solvers.solverGreedy import SolverGreedy
 
-SOLVERS = {"dfs": SolverDfs, "bfs": SolverBfs}
+SOLVERS = {"dfs": SolverDfs, "bfs": SolverBfs, "greedy": SolverGreedy}
 
 
 if __name__ == '__main__':

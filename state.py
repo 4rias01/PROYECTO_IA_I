@@ -16,6 +16,17 @@ class State:
         self.posy_robot = posy_robot
         self.cant_plantas = cant_plantas
 
+        self.busqueda_informada = False
+        self.plantas_sin_regar = []
+        self.pos_avion = []
+        self.pos_fertilizante = []
+
+    def inicializar_busqueda_informada(self, plantas, avion, fertilizante):
+        self.busqueda_informada = True
+        self.plantas_sin_regar = list(plantas)
+        self.pos_avion = avion
+        self.pos_fertilizante = fertilizante
+
     def get_state(self):
         return (self.posx_robot, self.posy_robot, self.cant_combustible,
                 self.cant_fertilizante, frozenset(self.plantas_regadas))
@@ -33,16 +44,15 @@ class State:
         self.cant_fertilizante = 2
 
     def usar_fertilizante(self):
-        if self.cant_fertilizante > 0 and (self.posx_robot, self.posy_robot) not in self.plantas_regadas:
+        x, y = self.posx_robot, self.posy_robot
+        
+        if self.cant_fertilizante > 0 and (x, y) not in self.plantas_regadas:
             self.cant_fertilizante -= 1
             self.cant_plantas -= 1
-            self.plantas_regadas.add((self.posx_robot, self.posy_robot))
+            self.plantas_regadas.add((x, y))
+            if self.busqueda_informada:
+                self.plantas_sin_regar.remove((x,y))
 
-    def get_costo(self):
-        return self.costo_acum
-
-    def get_pos_robot(self):
-        return (self.posx_robot, self.posy_robot)
 
     def paso(self, pos_robot, casilla):
         self.costo_acum += self.costo_paso
@@ -65,6 +75,24 @@ class State:
         }
 
         opciones.get(casilla, lambda: "error")()
+
+    def get_plantas_regadas(self):
+        return self.plantas_regadas
+
+    def get_plantas_sin_regar(self):
+        return self.plantas_sin_regar
+    
+    def get_costo(self):
+        return self.costo_acum
+
+    def get_pos_robot(self):
+        return (self.posx_robot, self.posy_robot)
+
+    def get_pos_fertilizante(self):
+        return self.pos_fertilizante
+
+    def get_cant_fertilizante(self):
+        return self.cant_fertilizante
 
     def __eq__(self, other):
         return isinstance(other, State) and self.get_state() == other.get_state()

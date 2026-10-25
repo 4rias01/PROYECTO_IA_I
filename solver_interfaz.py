@@ -12,6 +12,9 @@ from readfile import Readfile
 # matrix[n][m][30][2][plantas]
 
 class Solver(ABC):
+    ARRIBA, ABAJO, IZQUIERDA, DERECHA = (0, -1), (0, 1), (-1, 0), (1, 0)
+    movimientos = [ARRIBA, ABAJO, IZQUIERDA, DERECHA]
+
     def __init__(self, tablero: Tablero):
         self.tablero = tablero
         self.nomenc = Readfile().get_nomenc()
@@ -21,12 +24,12 @@ class Solver(ABC):
         self.initial_state = State(posx_robot, posy_robot, cant_plantas)
 
 
+    # Retorna las casillas alcanzables en el orden de preferencia de self.movimientos
     def casillas_vecinas(self, estado: State) -> list[tuple[int, int]]:
         posx, posy = estado.get_pos_robot()
         casillas_vecinas = []
-        movimientos = [(-1, 0), (1, 0), (0, -1), (0, 1)]
 
-        for dx, dy in movimientos:
+        for dx, dy in self.movimientos:
             nx = posx + dx
             ny = posy + dy
 
