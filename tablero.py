@@ -21,7 +21,8 @@ class Tablero:
                     count_plants += 1
         return (pos_robot, count_plants)
 
-    def busqueda_informada(self, mat: list[list[int]]):
+    def busqueda_informada(self):
+        mat = self.tablero
         pos_plantas = []
         pos_fertilizante = []
         pos_avion = []
@@ -32,7 +33,7 @@ class Tablero:
                 if mat[i][j] == nomenc["PLANTA"]:
                     pos_plantas.append((j, i))
                 elif mat[i][j] == nomenc["FERTILIZANTE"]:
-                    pos_fertilizante= (j, i)
+                    pos_fertilizante = (j, i)
                 elif mat[i][j] == nomenc["AVION"]:
                     pos_avion = (j, i)
         self.pos_plantas = pos_plantas

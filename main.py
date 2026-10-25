@@ -1,6 +1,7 @@
 from readfile import Readfile
 from tablero import Tablero
 from solvers.solverDfs import SolverDfs
+from solvers.solverGreedy import SolverGreedy
 
 
 if __name__ == '__main__':
@@ -9,6 +10,9 @@ if __name__ == '__main__':
 
     tablero = Tablero(matrix)
 
-    solver = SolverDfs(tablero)
-    costo, camino = solver.solve()
-    print(camino)
+    solverDfs = SolverDfs(tablero)
+    solverGreedy = SolverGreedy(tablero)
+    # costoDfs, caminoDfs = solverDfs.solve()
+    costoGreedy, caminoGreedy = solverGreedy.solve()
+    print(f"El costo de la solución greedy fue de {costoGreedy}")
+    print(caminoGreedy)
