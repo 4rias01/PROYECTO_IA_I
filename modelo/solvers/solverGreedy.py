@@ -14,17 +14,26 @@ class SolverGreedy(Solver):
         self.pos_plantas = self.tablero.get_pos_plantas()
         self.pos_fertilizante = self.tablero.get_pos_fertilizante()
 
-    def heuristica(self, estado: Estado) -> int:
+    def heuristica(self, estado: Estado) -> float:
         pos_robot = (estado.x, estado.y)
+        plantas_sin_regar = [planta for planta in self.pos_plantas if planta not in estado.regadas]
 
-        # Sin fertilizante: distancia hasta el fertilizante
-        if estado.fertilizante == 0:
-            return manhattan(pos_robot, self.pos_fertilizante)
+        # Validar si ya se regaron todas las plantas
+        if not plantas_sin_regar:
+            return 0.0
 
-        # Con fertilizante: suma de distancias a las plantas sin regar
-        return sum(manhattan(pos_robot, planta) for planta in self.pos_plantas
-                   if planta not in estado.regadas)
-
+        # Sin fertilizante: distancia al fertilizante + distancia del fertilizante a la planta más lejana
+        if estado.fertilizante <= 0:
+            robot_a_fertilizante = manhattan(pos_robot, self.pos_fertilizante)
+            fertilizante_a_planta = max([manhattan(self.pos_fertilizante, planta) 
+                                        for planta in plantas_sin_regar])
+            return 0.5 * (robot_a_fertilizante + fertilizante_a_planta)
+        else:
+            # Con fertilizante: distancia del robot a la planta más lejana
+            robot_a_planta = max([manhattan(pos_robot, planta) 
+                                for planta in plantas_sin_regar])
+        return 0.5 * robot_a_planta
+    
     def solve(self) -> tuple[float, list[list[int]]]:
         # Cola de prioridad: (heuristica, contador, nodo)
         # Los empates en la heurística se rompen por el contador (que evita comparar nodos)
