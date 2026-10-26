@@ -10,6 +10,7 @@ class State:
         self.plantas_regadas = set()
 
         self.cant_combustible = 0
+        self.avion_tomada = False
         self.cant_fertilizante = 0
 
         self.posx_robot = posx_robot
@@ -29,9 +30,14 @@ class State:
 
     def get_state(self):
         return (self.posx_robot, self.posy_robot, self.cant_combustible,
-                self.cant_fertilizante, frozenset(self.plantas_regadas))
+                self.cant_fertilizante, frozenset(self.plantas_regadas),
+                self.avion_tomada)
 
     def coger_combustible(self):
+        # La avioneta es de un solo uso: si ya se tomó, pisar su casilla no recarga
+        if self.avion_tomada:
+            return
+        self.avion_tomada = True
         self.cant_combustible = 30
         self.costo_paso = 0.5
 
