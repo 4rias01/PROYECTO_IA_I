@@ -20,8 +20,8 @@ class Solver(ABC):
         self.nomenc = Readfile().get_nomenc()
 
         posx_robot, posy_robot = tablero.get_pos_robot()
-        cant_plantas = tablero.get_cant_plantas()
-        self.initial_state = State(posx_robot, posy_robot, cant_plantas)
+        total_plantas = tablero.get_cant_plantas()
+        self.initial_state = State(posx_robot, posy_robot, total_plantas)
 
 
     # Retorna las casillas alcanzables en el orden de preferencia de self.movimientos
