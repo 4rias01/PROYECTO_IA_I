@@ -1,6 +1,6 @@
-from solver_interfaz import Solver
-from tablero import Tablero
-from estado import Estado, Nodo
+from modelo.solver_interfaz import Solver
+from modelo.tablero import Tablero
+from modelo.estado import Estado, Nodo
 import heapq
 
 def manhattan(a, b):

@@ -1,4 +1,4 @@
-from readfile import Readfile
+from modelo.readfile import Readfile
 
 class Tablero:
     __slots__ = ("pos_robot", "count_plants", "nomenc", "tablero",

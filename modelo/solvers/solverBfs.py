@@ -1,7 +1,7 @@
 from collections import deque
-from solver_interfaz import Solver
-from tablero import Tablero
-from estado import Nodo
+from modelo.solver_interfaz import Solver
+from modelo.tablero import Tablero
+from modelo.estado import Nodo
 
 class SolverBfs(Solver):
     def __init__(self, tablero: Tablero):
