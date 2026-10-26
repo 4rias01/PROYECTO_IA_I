@@ -1,41 +1,28 @@
 from solver_interfaz import Solver
 from tablero import Tablero
-import copy
+from estado import Nodo
 
 class SolverDfs(Solver):
     def __init__(self, tablero: Tablero):
         super().__init__(tablero)
 
-        self.queue = [(self.initial_state, [self.initial_state])]
-        self.visitados = set()
-
     def solve(self) -> tuple[float, list[list[int]]]:
-        while self.queue:
-            estado_actual, camino = self.queue.pop()
+        pila = [Nodo(self.estado_inicial)]
+        visitados = set()
 
-            if estado_actual.isWin():
-                print(f"¡Solución encontrada! Costo total: {estado_actual.get_costo()}")
-                return (estado_actual.get_costo(),
-                        [list(estado.get_pos_robot()) for estado in camino])
+        while pila:
+            nodo = pila.pop()
 
-            
-            tupla_estado = estado_actual.get_state()
-            if tupla_estado in self.visitados:
+            if self.es_meta(nodo.estado):
+                print(f"¡Solución encontrada! Costo total: {nodo.g}")
+                return (nodo.g, nodo.camino())
+
+            if nodo.estado in visitados:
                 continue
-            self.visitados.add(tupla_estado)
+            visitados.add(nodo.estado)
 
             # Se apilan al revés para que el operador preferido quede encima y salga primero
-            for nueva_x, nueva_y in reversed(self.casillas_vecinas(estado_actual)):
-
-                # 1. Clonar el estado actual
-                nuevo_estado = copy.deepcopy(estado_actual)
-
-                # 2. Obtener la casilla usando tu método seguro
-                casilla = self.tablero.get_posicion(nueva_y, nueva_x)
-
-                # 3. Aplicar el paso al nuevo estado
-                nuevo_estado.paso((nueva_x, nueva_y), casilla)
-                self.queue.append((nuevo_estado, camino + [nuevo_estado]))
+            pila.extend(reversed(self.expandir(nodo)))
 
         print("No se encontró solución.")
         return (-1, [])
