@@ -1,5 +1,5 @@
 from typing import NamedTuple
-from readfile import Readfile
+from modelo.readfile import Readfile
 
 _NOMENC = Readfile().get_nomenc()
 _PLANTA = _NOMENC["PLANTA"]

@@ -1,21 +1,26 @@
 import sys
-from readfile import Readfile
-from tablero import Tablero
-from solvers.solverDfs import SolverDfs
-from solvers.solverBfs import SolverBfs
-from solvers.solverGreedy import SolverGreedy
+from modelo.readfile import Readfile
+from modelo.tablero import Tablero
+from modelo.solvers.solverDfs import SolverDfs
+from modelo.solvers.solverBfs import SolverBfs
+from modelo.solvers.solverGreedy import SolverGreedy
+
+from controlador.controller import Controller
+from bridge import Bridge
 
 SOLVERS = {"dfs": SolverDfs, "bfs": SolverBfs, "greedy": SolverGreedy}
 
 
 if __name__ == '__main__':
+    Bridge(Controller()).run()
+
     nombre = sys.argv[1] if len(sys.argv) > 1 else "dfs"
     if nombre not in SOLVERS:
         print(f"Solver '{nombre}' no existe. Opciones: {', '.join(SOLVERS)}")
         sys.exit(1)
 
     rd = Readfile()
-    matrix = rd.file_to_matrix("tableros/lab.txt")
+    matrix = rd.file_to_matrix("modelo/tableros/lab.txt")
 
     tablero = Tablero(matrix)
 

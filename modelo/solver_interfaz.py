@@ -1,8 +1,8 @@
 
 from abc import ABC, abstractmethod
-from estado import Estado, Nodo
-from tablero import Tablero
-from readfile import Readfile
+from modelo.estado import Estado, Nodo
+from modelo.tablero import Tablero
+from modelo.readfile import Readfile
 
 # padre = padre
 # padre = hijo

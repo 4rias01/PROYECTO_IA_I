@@ -15,7 +15,7 @@ class Readfile:
 
     def __init__(self):
         if Readfile._nomenc is None:
-            Readfile._nomenc = read_nomenc("tableros/nomenc.txt")
+            Readfile._nomenc = read_nomenc("modelo/tableros/nomenc.txt")
         self.nomenc = Readfile._nomenc
 
     def file_to_matrix(self, path: str):

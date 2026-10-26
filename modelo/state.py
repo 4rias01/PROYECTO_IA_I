@@ -1,4 +1,4 @@
-from readfile import Readfile
+from modelo.readfile import Readfile
 # initial_state[pos_robot][combustible][fertilizante][plantas_regadas]
 # matrix[n][m][30][2][plantas]
 
