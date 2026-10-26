@@ -2,8 +2,17 @@ from readfile import Readfile
 # initial_state[pos_robot][combustible][fertilizante][plantas_regadas]
 # matrix[n][m][30][2][plantas]
 
+_NOMENC = Readfile().get_nomenc()
+
 # hay un prolema, y es que si pasa por una planta que ya fue regada
 class State:
+    # para change_state
+    ACCION_CASILLA = {
+        _NOMENC["PLANTA"]: "usar_fertilizante",
+        _NOMENC["FERTILIZANTE"]: "coger_fertilizante",
+        _NOMENC["AVION"]: "coger_combustible",
+    }
+
     def __init__(self, posx_robot, posy_robot, total_plantas):
         self.costo_paso = 1
         self.costo_acum = 0
@@ -70,16 +79,9 @@ class State:
         return len(self.plantas_regadas) == self.total_plantas
 
     def change_state(self, casilla):
-        nomenc = Readfile().get_nomenc()
-        opciones = {
-            nomenc["VACIO"]  : lambda: "",
-            nomenc["ROBOT"]  : lambda: "",
-            nomenc["PLANTA"] : self.usar_fertilizante,
-            nomenc["FERTILIZANTE"] : self.coger_fertilizante,
-            nomenc["AVION"]  : self.coger_combustible
-        }
-
-        opciones.get(casilla, lambda: "error")()
+        accion = self.ACCION_CASILLA.get(casilla)
+        if accion:
+            getattr(self, accion)() #ejecuta el metodo
 
     def get_plantas_regadas(self):
         return self.plantas_regadas

@@ -10,8 +10,13 @@ def read_nomenc(path: str):
         return dictionary
 
 class Readfile:
+    # atributo de clase; solo se lee una vez. Si crean o usan algun metodo de la clase y ya se leyó la nomenclatura simplemente se devuelve.
+    _nomenc = None
+
     def __init__(self):
-        self.nomenc = read_nomenc("tableros/nomenc.txt")
+        if Readfile._nomenc is None:
+            Readfile._nomenc = read_nomenc("tableros/nomenc.txt")
+        self.nomenc = Readfile._nomenc
 
     def file_to_matrix(self, path: str):
         mat: list[list[str]] = []
