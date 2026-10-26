@@ -1,20 +1,30 @@
 from readfile import Readfile
-# initial_state[pos_robot][combustible][fertilizante][cant_plantas]
+# initial_state[pos_robot][combustible][fertilizante][plantas_regadas]
 # matrix[n][m][30][2][plantas]
+
+_NOMENC = Readfile().get_nomenc()
 
 # hay un prolema, y es que si pasa por una planta que ya fue regada
 class State:
-    def __init__(self, posx_robot, posy_robot, cant_plantas):
+    # para change_state
+    ACCION_CASILLA = {
+        _NOMENC["PLANTA"]: "usar_fertilizante",
+        _NOMENC["FERTILIZANTE"]: "coger_fertilizante",
+        _NOMENC["AVION"]: "coger_combustible",
+    }
+
+    def __init__(self, posx_robot, posy_robot, total_plantas):
         self.costo_paso = 1
         self.costo_acum = 0
         self.plantas_regadas = set()
 
         self.cant_combustible = 0
+        self.avion_tomada = False
         self.cant_fertilizante = 0
 
         self.posx_robot = posx_robot
         self.posy_robot = posy_robot
-        self.cant_plantas = cant_plantas
+        self.total_plantas = total_plantas
 
         self.busqueda_informada = False
         self.plantas_sin_regar = []
@@ -29,9 +39,14 @@ class State:
 
     def get_state(self):
         return (self.posx_robot, self.posy_robot, self.cant_combustible,
-                self.cant_fertilizante, frozenset(self.plantas_regadas))
+                self.cant_fertilizante, frozenset(self.plantas_regadas),
+                self.avion_tomada)
 
     def coger_combustible(self):
+        # La avioneta es de un solo uso: si ya se tomó, pisar su casilla no recarga
+        if self.avion_tomada:
+            return
+        self.avion_tomada = True
         self.cant_combustible = 30
         self.costo_paso = 0.5
 
@@ -48,7 +63,6 @@ class State:
         
         if self.cant_fertilizante > 0 and (x, y) not in self.plantas_regadas:
             self.cant_fertilizante -= 1
-            self.cant_plantas -= 1
             self.plantas_regadas.add((x, y))
             if self.busqueda_informada:
                 self.plantas_sin_regar.remove((x,y))
@@ -62,19 +76,12 @@ class State:
         self.change_state(casilla)
 
     def isWin(self):
-        return self.cant_plantas == 0
+        return len(self.plantas_regadas) == self.total_plantas
 
     def change_state(self, casilla):
-        nomenc = Readfile().get_nomenc()
-        opciones = {
-            nomenc["VACIO"]  : lambda: "",
-            nomenc["ROBOT"]  : lambda: "",
-            nomenc["PLANTA"] : self.usar_fertilizante,
-            nomenc["FERTILIZANTE"] : self.coger_fertilizante,
-            nomenc["AVION"]  : self.coger_combustible
-        }
-
-        opciones.get(casilla, lambda: "error")()
+        accion = self.ACCION_CASILLA.get(casilla)
+        if accion:
+            getattr(self, accion)() #ejecuta el metodo
 
     def get_plantas_regadas(self):
         return self.plantas_regadas

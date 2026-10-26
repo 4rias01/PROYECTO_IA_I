@@ -1,15 +1,11 @@
 
 from abc import ABC, abstractmethod
-from state import State
+from estado import Estado, Nodo
 from tablero import Tablero
 from readfile import Readfile
 
 # padre = padre
 # padre = hijo
-
-
-# initial_state[posy_robot][posx_robot][combustible0][tiene_fertilizante][cant_plantas]
-# matrix[n][m][30][2][plantas]
 
 class Solver(ABC):
     ARRIBA, ABAJO, IZQUIERDA, DERECHA = (0, -1), (0, 1), (-1, 0), (1, 0)
@@ -20,13 +16,14 @@ class Solver(ABC):
         self.nomenc = Readfile().get_nomenc()
 
         posx_robot, posy_robot = tablero.get_pos_robot()
-        cant_plantas = tablero.get_cant_plantas()
-        self.initial_state = State(posx_robot, posy_robot, cant_plantas)
+        total_plantas = tablero.get_cant_plantas()
+
+        self.total_plantas = total_plantas
+        self.estado_inicial = Estado(posx_robot, posy_robot, 0, frozenset(), 0, False)
 
 
     # Retorna las casillas alcanzables en el orden de preferencia de self.movimientos
-    def casillas_vecinas(self, estado: State) -> list[tuple[int, int]]:
-        posx, posy = estado.get_pos_robot()
+    def vecinas(self, posx: int, posy: int) -> list[tuple[int, int]]:
         casillas_vecinas = []
 
         for dx, dy in self.movimientos:
@@ -41,6 +38,16 @@ class Solver(ABC):
                     casillas_vecinas.append((nx, ny))
 
         return casillas_vecinas
+
+    def es_meta(self, estado: Estado) -> bool:
+        return len(estado.regadas) == self.total_plantas
+
+    # expande un nodo y devuelve los nodos vecinos en las direcciones de nx y ny
+    def expandir(self, nodo: Nodo) -> list[Nodo]:
+        estado = nodo.estado
+        g = nodo.g + estado.costo_paso()
+        return [Nodo(estado.mover(nx, ny, self.tablero.get_posicion(ny, nx)), nodo, g)
+                for nx, ny in self.vecinas(estado.x, estado.y)]
 
     # Retorna (costo, camino), donde camino es la lista de posiciones [x, y] del robot
     @abstractmethod
