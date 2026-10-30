@@ -4,11 +4,12 @@ from modelo.tablero import Tablero
 from modelo.solvers.solverDfs import SolverDfs
 from modelo.solvers.solverBfs import SolverBfs
 from modelo.solvers.solverGreedy import SolverGreedy
+from modelo.solvers.solverUcs import SolverUcs
 
 from controlador.controller import Controller
 from bridge import Bridge
 
-SOLVERS = {"dfs": SolverDfs, "bfs": SolverBfs, "greedy": SolverGreedy}
+SOLVERS = {"dfs": SolverDfs, "bfs": SolverBfs, "greedy": SolverGreedy, "ucs": SolverUcs}
 
 
 if __name__ == '__main__':

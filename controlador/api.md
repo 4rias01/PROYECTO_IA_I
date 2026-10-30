@@ -34,7 +34,7 @@ Todos devuelven `Promise`, así que se usan con `await`.
 window.addEventListener("pywebviewready", async () => {
   // Aquí ya puedes llamar los métodos:
   const algoritmos = await window.pywebview.api.listar_algoritmos();
-  console.log(algoritmos);  // ["bfs", "dfs", "greedy"]
+  console.log(algoritmos);  // ["bfs", "dfs", "greedy", "ucs"]
 
   const mundo = await window.pywebview.api.cargar_mundo("modelo/tableros/lab.txt");
   console.log(mundo.robot);  // [4, 0]
