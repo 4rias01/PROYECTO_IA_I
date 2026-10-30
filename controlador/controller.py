@@ -54,11 +54,7 @@ class Controller:
         inicio = time.perf_counter()
         costo, camino = solver.solve()
         tiempo = time.perf_counter() - inicio
-        #Parche temporal en lo que se le pone un contador de nodos expandidos al solver
-        try:
-            valor = solver.nodos_expandidos
-        except AttributeError:
-            valor = -1
+        valor = solver.nodos_expandidos
 
         if costo == -1:
             return {

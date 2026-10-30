@@ -20,6 +20,7 @@ class Solver(ABC):
 
         self.total_plantas = total_plantas
         self.estado_inicial = Estado(posx_robot, posy_robot, 0, frozenset(), 0, False)
+        self.nodos_expandidos = 0
 
 
     # Retorna las casillas alcanzables en el orden de preferencia de self.movimientos
@@ -43,7 +44,9 @@ class Solver(ABC):
         return len(estado.regadas) == self.total_plantas
 
     # expande un nodo y devuelve los nodos vecinos en las direcciones de nx y ny
+    # todos los solvers expanden por aqui, asi que el contador sirve para todos
     def expandir(self, nodo: Nodo) -> list[Nodo]:
+        self.nodos_expandidos += 1
         estado = nodo.estado
         g = nodo.g + estado.costo_paso()
         return [Nodo(estado.mover(nx, ny, self.tablero.get_posicion(ny, nx)), nodo, g)
