@@ -1,6 +1,7 @@
 from modelo.solvers.solverBfs import SolverBfs
 from modelo.solvers.solverDfs import SolverDfs
 from modelo.solvers.solverGreedy import SolverGreedy
+from modelo.solvers.solverAstar import SolverAstar
 
 from modelo.readfile import Readfile
 from modelo.tablero import Tablero
@@ -14,6 +15,7 @@ class Controller:
         "bfs": SolverBfs,
         "dfs": SolverDfs,
         "greedy": SolverGreedy,
+        "astar": SolverAstar,
     }
 
     def __init__(self):
