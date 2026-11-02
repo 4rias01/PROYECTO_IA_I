@@ -22,6 +22,10 @@ class Estado(NamedTuple):
     def costo_paso(self) -> float:
         return 0.5 if self.combustible > 0 else 1
 
+    # solo lo usamos para DFS. Ver el comentario en él para entender por qué
+    def clave_sin_combustible(self) -> tuple:
+        return (self.x, self.y, self.fertilizante, self.regadas, self.avion_tomada)
+
     # la vaina es inmutable, el movimiento devuelve el nuevo estado que ese movimiento generaria
     def mover(self, nx: int, ny: int, casilla: str) -> "Estado":
         fertilizante = self.fertilizante

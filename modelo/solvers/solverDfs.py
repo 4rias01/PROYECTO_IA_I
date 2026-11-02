@@ -17,9 +17,13 @@ class SolverDfs(Solver):
                 print(f"¡Solución encontrada! Costo total: {nodo.g}")
                 return (nodo.g, nodo.camino())
 
-            if nodo.estado in visitados:
+            # Antes con el combustible ibamos en un ciclo arriba a abajo. 
+            # Sin combustible la posicion de la avioneta si se toma como un estado ya visto.
+            # Asi que DFS no entra en ese ciclo jeje
+            clave = nodo.estado.clave_sin_combustible()
+            if clave in visitados:
                 continue
-            visitados.add(nodo.estado)
+            visitados.add(clave)
 
             # Se apilan al revés para que el operador preferido quede encima y salga primero
             pila.extend(reversed(self.expandir(nodo)))
