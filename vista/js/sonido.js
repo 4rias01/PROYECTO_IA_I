@@ -1,6 +1,6 @@
 // Efectos de sonido chiptune generados con WebAudio (ondas cuadradas, sin archivos)
 
-const Sonido = {
+export const Sonido = {
   activo: true,
   _ctx: null,
 

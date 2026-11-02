@@ -138,7 +138,7 @@ PALETAS.bowserDerrotado = paletaGris(PALETAS.bowser);
 
 // Pinta una matriz en un canvas de 16x16 y lo cachea
 const _cacheSprites = new Map();
-function sprite(nombreMatriz, nombrePaleta = nombreMatriz) {
+export function sprite(nombreMatriz, nombrePaleta = nombreMatriz) {
   const clave = `${nombreMatriz}/${nombrePaleta}`;
   if (_cacheSprites.has(clave)) return _cacheSprites.get(clave);
 
@@ -160,7 +160,7 @@ function sprite(nombreMatriz, nombrePaleta = nombreMatriz) {
 }
 
 // Canvas suelto con un sprite ampliado, para la leyenda y el HUD
-function iconoSprite(nombreMatriz, nombrePaleta, escala = 2) {
+export function iconoSprite(nombreMatriz, nombrePaleta, escala = 2) {
   const lienzo = document.createElement("canvas");
   lienzo.width = 16 * escala;
   lienzo.height = 16 * escala;
