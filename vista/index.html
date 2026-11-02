@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>AgroBot</title>
+</head>
+<body>
+  <h1>AgroBot Backend</h1>
+  <pre id="out">Esperando a que Python despierte...</pre>
+  <script>
+    window.addEventListener("pywebviewready", async () => {
+      const out = document.getElementById("out");
+      try {
+        const algs = await window.pywebview.api.listar_algoritmos();
+        out.textContent = "Algoritmos: " + JSON.stringify(algs) + "\n";
+        
+        const mundo = await window.pywebview.api.cargar_mundo("modelo/tableros/lab.txt");
+        out.textContent += "Robot en: " + JSON.stringify(mundo.robot) + "\n";
+        
+        const res = await window.pywebview.api.ejecutar("bfs");
+        out.textContent += "BFS pasos: " + res.camino.length + "\n";
+        out.textContent += "BFS stats: " + JSON.stringify(res.stats) + "\n";
+      } catch (e) {
+        out.textContent = "ERROR: " + e;
+      }
+    });
+  </script>
+</body>
+</html>
