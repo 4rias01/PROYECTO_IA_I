@@ -1,4 +1,9 @@
 ## listar_algoritmos() -> string[]
+["bfs", "costo", "dfs", "greedy", "astar"]
+
+## elegir_archivo() -> string | null
+Abre el diálogo nativo para escoger el .txt del mundo. Devuelve la ruta o null si se cancela.
+
 ## cargar_mundo(path: string) -> {
     matriz: string[][],
     robot: [x, y],

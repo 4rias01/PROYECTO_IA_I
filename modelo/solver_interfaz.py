@@ -11,7 +11,7 @@ def manhattan(a, b):
 
 class Solver(ABC):
     ARRIBA, ABAJO, IZQUIERDA, DERECHA = (0, -1), (0, 1), (-1, 0), (1, 0)
-    movimientos = [ARRIBA, ABAJO, IZQUIERDA, DERECHA]
+    movimientos = [ARRIBA, ABAJO, DERECHA, IZQUIERDA]
 
     def __init__(self, tablero: Tablero):
         self.tablero = tablero

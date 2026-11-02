@@ -1,3 +1,5 @@
+import os
+
 import webview
 
 
@@ -14,6 +16,15 @@ class Api:
     def ejecutar(self, algoritmo):
         return self._controller.ejecutar(algoritmo)
 
+    # Abre el diálogo nativo para escoger el .txt del mundo; devuelve la ruta o None si se cancela
+    def elegir_archivo(self):
+        rutas = webview.windows[0].create_file_dialog(
+            webview.FileDialog.OPEN,
+            directory=os.path.abspath("modelo/tableros"),
+            file_types=("Mundos (*.txt)", "Todos los archivos (*.*)"),
+        )
+        return rutas[0] if rutas else None
+
 
 class Bridge:
     def __init__(self, controller):
@@ -21,5 +32,6 @@ class Bridge:
 
     def run(self):
         api = Api(self.controller)
-        webview.create_window("AgroBot", "vista/index.html", js_api=api)
+        webview.create_window("Super AgroBot", "vista/index.html", js_api=api,
+                              width=1280, height=880, min_size=(960, 680))
         webview.start(gui="qt")
