@@ -6,7 +6,7 @@ class SolverDfs(Solver):
     def __init__(self, tablero: Tablero):
         super().__init__(tablero)
 
-    def solve(self) -> tuple[float, list[list[int]]]:
+    def solve(self) -> Nodo | None:
         pila = [Nodo(self.estado_inicial)]
         visitados = set()
 
@@ -15,7 +15,7 @@ class SolverDfs(Solver):
 
             if self.es_meta(nodo.estado):
                 print(f"¡Solución encontrada! Costo total: {nodo.g}")
-                return (nodo.g, nodo.camino())
+                return nodo
 
             # Antes con el combustible ibamos en un ciclo arriba a abajo. 
             # Sin combustible la posicion de la avioneta si se toma como un estado ya visto.
@@ -29,4 +29,4 @@ class SolverDfs(Solver):
             pila.extend(reversed(self.expandir(nodo)))
 
         print("No se encontró solución.")
-        return (-1, [])
+        return None 

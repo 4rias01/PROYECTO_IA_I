@@ -12,7 +12,7 @@ class SolverAstar(Solver):
             self.pos_plantas = self.tablero.get_pos_plantas()
             self.pos_fertilizante = self.tablero.get_pos_fertilizante()
 
-    def solve(self) -> tuple[float, list[list[int]]]:
+    def solve(self) -> Nodo | None:
         # Cola de prioridad: (g + h, contador, nodo)
         contador = 0
         raiz = Nodo(self.estado_inicial)
@@ -25,7 +25,7 @@ class SolverAstar(Solver):
             # La meta se revisa al sacar el nodo, no al generarlo: asi el costo es optimo
             if self.es_meta(nodo.estado):
                 print(f"¡Solución encontrada! Costo total: {nodo.g}")
-                return (nodo.g, nodo.camino())
+                return nodo
 
             # Si alguno de los visitados es igual a él pero con igual o mayor
             # cantidad de combustible, se descarta
@@ -37,4 +37,4 @@ class SolverAstar(Solver):
                 heapq.heappush(cola, (hijo.g + self.heuristica(hijo.estado), contador, hijo))
 
         print("No se encontró solución.")
-        return (-1, [])
+        return None  

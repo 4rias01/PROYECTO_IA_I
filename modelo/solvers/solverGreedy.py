@@ -14,7 +14,7 @@ class SolverGreedy(Solver):
         self.pos_plantas = self.tablero.get_pos_plantas()
         self.pos_fertilizante = self.tablero.get_pos_fertilizante()
     
-    def solve(self) -> tuple[float, list[list[int]]]:
+    def solve(self) -> Nodo | None:
         # Cola de prioridad: (heuristica, contador, nodo)
         # Los empates en la heurística se rompen por el contador (que evita comparar nodos)
         contador = 0
@@ -27,7 +27,7 @@ class SolverGreedy(Solver):
 
             if self.es_meta(nodo.estado):
                 print(f"¡Solución encontrada! Costo total: {nodo.g}")
-                return (nodo.g, nodo.camino())
+                return nodo 
 
             # Greedy solo usa heuristica la cual no usa la cant de combustible, entonces podemos usar la clave sin combustible as usual.
             clave = nodo.estado.clave_sin_combustible()
@@ -40,4 +40,4 @@ class SolverGreedy(Solver):
                 heapq.heappush(cola, (self.heuristica(hijo.estado), contador, hijo))
 
         print("No se encontró solución.")
-        return (-1, [])
+        return None 

@@ -7,7 +7,7 @@ class SolverBfs(Solver):
     def __init__(self, tablero: Tablero):
         super().__init__(tablero)
 
-    def solve(self) -> tuple[float, list[list[int]]]:
+    def solve(self) -> Nodo | None:
         raiz = Nodo(self.estado_inicial)
         cola = deque([raiz])
         visitados = {raiz.estado.clave_sin_combustible()}
@@ -17,7 +17,7 @@ class SolverBfs(Solver):
 
             if self.es_meta(nodo.estado):
                 print(f"¡Solución encontrada! Costo total: {nodo.g}")
-                return (nodo.g, nodo.camino())
+                return nodo
 
             for hijo in self.expandir(nodo):
                 clave = hijo.estado.clave_sin_combustible()
@@ -27,4 +27,4 @@ class SolverBfs(Solver):
                 cola.append(hijo)
 
         print("No se encontró solución.")
-        return (-1, [])
+        return None

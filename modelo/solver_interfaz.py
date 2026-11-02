@@ -83,9 +83,10 @@ class Solver(ABC):
         return [Nodo(estado.mover(nx, ny, self.tablero.get_posicion(ny, nx)), nodo, g)
                 for nx, ny in self.vecinas(estado.x, estado.y)]
 
-    # Retorna (costo, camino), donde camino es la lista de posiciones [x, y] del robot
+    # Retorna el nodo meta o None si no se encontró solucion. De el podemos sacar directamente g, profunidad y camino completo
+    # Seria .camino / .estados si no estoy mal xd
     @abstractmethod
-    def solve(self) -> tuple[float, list[list[int]]]:
+    def solve(self) -> Nodo | None:
         pass
 
 
