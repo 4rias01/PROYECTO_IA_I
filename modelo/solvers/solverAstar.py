@@ -1,9 +1,17 @@
-from modelo.solvers.solverGreedy import SolverGreedy
+from modelo.solver_interfaz import Solver
+from modelo.tablero import Tablero
 from modelo.estado import Nodo
 import heapq
 
 # Igual que greedy (misma heuristica), pero la prioridad es g + h
-class SolverAstar(SolverGreedy):
+class SolverAstar(Solver):
+    def __init__(self, tablero: Tablero):
+            super().__init__(tablero)
+    
+            self.tablero.busqueda_informada()
+            self.pos_plantas = self.tablero.get_pos_plantas()
+            self.pos_fertilizante = self.tablero.get_pos_fertilizante()
+
     def solve(self) -> tuple[float, list[list[int]]]:
         # Cola de prioridad: (g + h, contador, nodo)
         contador = 0
