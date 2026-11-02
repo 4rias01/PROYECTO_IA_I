@@ -65,6 +65,15 @@ class Solver(ABC):
     def es_meta(self, estado: Estado) -> bool:
         return len(estado.regadas) == self.total_plantas
 
+    # Se domina a un estado cuando alguno de los nodos visitados es el mismo 
+    # pero con igual o más combustible
+    def dominado(self, visitados: dict, estado: Estado) -> bool:
+        clave = estado.clave_sin_combustible()
+        if visitados.get(clave, -1) >= estado.combustible:
+            return True
+        visitados[clave] = estado.combustible
+        return False
+
     # expande un nodo y devuelve los nodos vecinos en las direcciones de nx y ny
     # todos los solvers expanden por aqui, asi que el contador sirve para todos
     def expandir(self, nodo: Nodo) -> list[Nodo]:
