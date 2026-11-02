@@ -5,17 +5,19 @@ from modelo.solvers.solverDfs import SolverDfs
 from modelo.solvers.solverBfs import SolverBfs
 from modelo.solvers.solverGreedy import SolverGreedy
 from modelo.solvers.solverAstar import SolverAstar
+from modelo.solvers.solverCosto import SolverCosto
 
 from controlador.controller import Controller
 from bridge import Bridge
 
-SOLVERS = {"dfs": SolverDfs, "bfs": SolverBfs, "greedy": SolverGreedy, "astar": SolverAstar}
+SOLVERS = {"dfs": SolverDfs, "bfs": SolverBfs, 
+           "greedy": SolverGreedy, "astar": SolverAstar, "costo": SolverCosto}
 
 
 if __name__ == '__main__':
     Bridge(Controller()).run()
 
-    nombre = sys.argv[1] if len(sys.argv) > 1 else "dfs"
+    nombre = sys.argv[1] if len(sys.argv) > 1 else "costo"
     if nombre not in SOLVERS:
         print(f"Solver '{nombre}' no existe. Opciones: {', '.join(SOLVERS)}")
         sys.exit(1)

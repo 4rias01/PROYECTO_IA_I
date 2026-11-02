@@ -1,4 +1,3 @@
-
 from abc import ABC, abstractmethod
 from modelo.estado import Estado, Nodo
 from modelo.tablero import Tablero
@@ -6,6 +5,9 @@ from modelo.readfile import Readfile
 
 # padre = padre
 # padre = hijo
+def manhattan(a, b):
+    return abs(a[0] - b[0]) + abs(a[1] - b[1])
+
 
 class Solver(ABC):
     ARRIBA, ABAJO, IZQUIERDA, DERECHA = (0, -1), (0, 1), (-1, 0), (1, 0)
@@ -22,6 +24,26 @@ class Solver(ABC):
         self.estado_inicial = Estado(posx_robot, posy_robot, 0, frozenset(), 0, False)
         self.nodos_expandidos = 0
 
+    # Heuristica que usaran los algoritmos de busqueda informada
+    def heuristica(self, estado: Estado) -> float:
+        pos_robot = (estado.x, estado.y)
+        plantas_sin_regar = [planta for planta in self.pos_plantas if planta not in estado.regadas]
+   
+        # Validar si ya se regaron todas las plantas
+        if not plantas_sin_regar:
+            return 0.0
+
+        # Sin fertilizante: distancia al fertilizante + distancia del fertilizante a la planta más lejana
+        if estado.fertilizante <= 0:
+            robot_a_fertilizante = manhattan(pos_robot, self.pos_fertilizante)
+            fertilizante_a_planta = max([manhattan(self.pos_fertilizante, planta) 
+                                        for planta in plantas_sin_regar])
+            return 0.5 * (robot_a_fertilizante + fertilizante_a_planta)
+        else:
+            # Con fertilizante: distancia del robot a la planta más lejana
+            robot_a_planta = max([manhattan(pos_robot, planta) 
+                                for planta in plantas_sin_regar])
+        return 0.5 * robot_a_planta
 
     # Retorna las casillas alcanzables en el orden de preferencia de self.movimientos
     def vecinas(self, posx: int, posy: int) -> list[tuple[int, int]]:

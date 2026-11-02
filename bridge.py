@@ -22,4 +22,4 @@ class Bridge:
     def run(self):
         api = Api(self.controller)
         webview.create_window("AgroBot", "vista/index.html", js_api=api)
-        webview.start()
+        webview.start(gui="qt")
