@@ -5,7 +5,7 @@ import heapq
 
 # Igual que greedy (misma heuristica), pero la prioridad es g + h
 class SolverCosto(Solver):
-    def solve(self) -> tuple[float, list[list[int]]]:
+    def solve(self) -> Nodo | None:
         # Cola de prioridad: (g + h, contador, nodo)
         contador = 0
         raiz = Nodo(self.estado_inicial)
@@ -18,7 +18,7 @@ class SolverCosto(Solver):
             # La meta se revisa al sacar el nodo, no al generarlo: asi el costo es optimo
             if self.es_meta(nodo.estado):
                 print(f"¡Solución encontrada! Costo total: {nodo.g}")
-                return (nodo.g, nodo.camino())
+                return nodo
 
             # No visitamos los nodos en los que ya hemos estado a no ser que su cantidad de combustible sea mejor.
             if self.dominado(visitados, nodo.estado):
@@ -29,4 +29,4 @@ class SolverCosto(Solver):
                 heapq.heappush(cola, (hijo.g, contador, hijo))
 
         print("No se encontró solución.")
-        return (-1, [])
+        return None

@@ -57,7 +57,7 @@ class Nodo:
         self.g = g
         self.profundidad = 0 if padre is None else padre.profundidad + 1
 
-    # lo que haciamos en los solvers generalizado; devuelve la lista de posiciones desde el inicio hasta este nodo
+    # funcion de depuracion. Nos imprime las posiciones x,y de una ruta de inicio a fin
     def camino(self) -> list[list[int]]:
         pos = []
         nodo = self
@@ -66,3 +66,13 @@ class Nodo:
             nodo = nodo.padre
         pos.reverse()
         return pos
+
+    # La lista completa de estados desde el inicial hasta el nodo que le pasemos. Usado para el controller jeje
+    def estados(self) -> list[Estado]:
+        estados = []
+        nodo = self
+        while nodo is not None:
+            estados.append(nodo.estado)
+            nodo = nodo.padre
+        estados.reverse()
+        return estados

@@ -28,5 +28,5 @@ if __name__ == '__main__':
     tablero = Tablero(matrix)
 
     solver = SOLVERS[nombre](tablero)
-    costo, camino = solver.solve()
-    print(camino)
+    nodo = solver.solve()
+    print(nodo.camino() if nodo else "No se encontró solución.")

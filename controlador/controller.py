@@ -6,7 +6,7 @@ from modelo.solvers.solverCosto import SolverCosto
 
 from modelo.readfile import Readfile
 from modelo.tablero import Tablero
-from modelo.estado import Estado
+from modelo.estado import Estado, Nodo
 
 import time
 
@@ -56,11 +56,11 @@ class Controller:
         solver = self.SOLVERS[algoritmo](self.tablero)
 
         inicio = time.perf_counter()
-        costo, camino = solver.solve()
+        nodo = solver.solve()
         tiempo = time.perf_counter() - inicio
         valor = solver.nodos_expandidos
 
-        if costo == -1:
+        if nodo is None:
             return {
                 "error": "No se encontró solución",
                 "camino": [],
@@ -73,40 +73,22 @@ class Controller:
             }
 
         return {
-            "camino": self._serializar_camino(camino, solver.estado_inicial),
+            "camino": self._serializar_camino(nodo),
             "stats": {
                 "nodos_expandidos": valor,
-                "profundidad": len(camino) - 1,
+                "profundidad": nodo.profundidad,
                 "tiempo_seg": tiempo,
-                "costo": costo,
+                "costo": nodo.g,
             },
         }
 
-    #Serializa el camino que devuelve el solver al ejecutar
-    def _serializar_camino(self, camino: list[list[int]], estado_inicial: Estado) -> list[dict]:
-        """
-        'camino' es la lista de posiciones [x, y] que devuelve nodo.camino().
-        Como no incluye fertilizante/combustible/regadas, recorremos de nuevo
-        desde el estado inicial para recuperar los datos de cada paso.
-        """
-
-        #Posición inicial
-        x0, y0 = self.tablero.get_pos_robot()
-
-        #Estado inicial, en la posición inicial, sin fertilizante, sin plantas regadas, sin combustibles y sin avioneta
-        est = estado_inicial
-
-        #Lista de pasos empezando con el paso inicial. Un paso es un estado serializado
-        pasos = [self._paso_dict(0, est, None)]
-        prev = est 
-
-        #Añade todos los pasos según el camino (que es la lista de movimientos)
-        for i, (x, y) in enumerate(camino[1:], start=1):
-            casilla = self.tablero.get_posicion(y, x)
-            est = est.mover(x, y, casilla)
+    # Serializa el camino hasta el nodo meta en pasos
+    def _serializar_camino(self, meta: Nodo) -> list[dict]:
+        estados = meta.estados()
+        pasos = []
+        for i, est in enumerate(estados):
+            prev = estados[i - 1] if i > 0 else None
             pasos.append(self._paso_dict(i, est, prev))
-            prev = est
-
         return pasos
 
     #Serializa un estado transformándolo en paso.
@@ -124,9 +106,7 @@ class Controller:
             "evento": self._detectar_evento(est, prev),
         }
 
-#Revisa si algo cambió. Si el estado anterior es none, es el estado inicial.
-# Si el combustible aumentó, se cogió el avión. Si el fertilizante aumentó, se cogió el fertilizante, 
-#y si aumentó la cantidad de plantas regadas, se regó una planta
+    # Revisa si algo cambio
     def _detectar_evento(self, est: Estado, prev: Estado | None) -> str | None:
         if prev is None:
             return "inicio"
