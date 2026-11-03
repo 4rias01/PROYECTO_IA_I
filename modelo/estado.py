@@ -22,7 +22,8 @@ class Estado(NamedTuple):
     def costo_paso(self) -> float:
         return 0.5 if self.combustible > 0 else 1
 
-    # solo lo usamos para DFS. Ver el comentario en él para entender por qué
+    # Usado por todos los solvers. Costo y A-star lo usan wrappeado en la funcion dominado ya que en ellos se considera
+    # la cantidad de combustible restante para la funcion de costo
     def clave_sin_combustible(self) -> tuple:
         return (self.x, self.y, self.fertilizante, self.regadas, self.avion_tomada)
 
