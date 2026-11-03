@@ -10,7 +10,7 @@ class SolverBfs(Solver):
     def solve(self) -> tuple[float, list[list[int]]]:
         raiz = Nodo(self.estado_inicial)
         cola = deque([raiz])
-        visitados = {raiz.estado}
+        visitados = {raiz.estado.clave_sin_combustible()}
 
         while cola:
             nodo = cola.popleft()
@@ -20,9 +20,10 @@ class SolverBfs(Solver):
                 return (nodo.g, nodo.camino())
 
             for hijo in self.expandir(nodo):
-                if hijo.estado in visitados:
+                clave = hijo.estado.clave_sin_combustible()
+                if clave in visitados:
                     continue
-                visitados.add(hijo.estado)
+                visitados.add(clave)
                 cola.append(hijo)
 
         print("No se encontró solución.")

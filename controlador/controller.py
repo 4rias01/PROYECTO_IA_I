@@ -2,6 +2,7 @@ from modelo.solvers.solverBfs import SolverBfs
 from modelo.solvers.solverDfs import SolverDfs
 from modelo.solvers.solverGreedy import SolverGreedy
 from modelo.solvers.solverAstar import SolverAstar
+from modelo.solvers.solverCosto import SolverCosto
 
 from modelo.readfile import Readfile
 from modelo.tablero import Tablero
@@ -13,6 +14,7 @@ import time
 class Controller:
     SOLVERS = {
         "bfs": SolverBfs,
+        "costo": SolverCosto,
         "dfs": SolverDfs,
         "greedy": SolverGreedy,
         "astar": SolverAstar,

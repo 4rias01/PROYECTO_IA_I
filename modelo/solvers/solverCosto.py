@@ -10,7 +10,7 @@ class SolverCosto(Solver):
         contador = 0
         raiz = Nodo(self.estado_inicial)
         cola = [(0, contador, raiz)]
-        visitados = set()
+        visitados = {} 
 
         while cola:
             _, _, nodo = heapq.heappop(cola)
@@ -20,10 +20,9 @@ class SolverCosto(Solver):
                 print(f"¡Solución encontrada! Costo total: {nodo.g}")
                 return (nodo.g, nodo.camino())
 
-            # No visitamos los nodos en los que ya hemos estado
-            if nodo.estado in visitados:
+            # No visitamos los nodos en los que ya hemos estado a no ser que su cantidad de combustible sea mejor.
+            if self.dominado(visitados, nodo.estado):
                 continue
-            visitados.add(nodo.estado)
 
             for hijo in self.expandir(nodo):
                 contador += 1

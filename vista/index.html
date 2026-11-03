@@ -1,29 +1,104 @@
 <!DOCTYPE html>
-<html>
+<html lang="es">
 <head>
   <meta charset="utf-8">
-  <title>AgroBot</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Super AgroBot</title>
+  <link rel="stylesheet" href="css/estilos.css">
 </head>
 <body>
-  <h1>AgroBot Backend</h1>
-  <pre id="out">Esperando a que Python despierte...</pre>
-  <script>
-    window.addEventListener("pywebviewready", async () => {
-      const out = document.getElementById("out");
-      try {
-        const algs = await window.pywebview.api.listar_algoritmos();
-        out.textContent = "Algoritmos: " + JSON.stringify(algs) + "\n";
-        
-        const mundo = await window.pywebview.api.cargar_mundo("modelo/tableros/lab.txt");
-        out.textContent += "Robot en: " + JSON.stringify(mundo.robot) + "\n";
-        
-        const res = await window.pywebview.api.ejecutar("bfs");
-        out.textContent += "BFS pasos: " + res.camino.length + "\n";
-        out.textContent += "BFS stats: " + JSON.stringify(res.stats) + "\n";
-      } catch (e) {
-        out.textContent = "ERROR: " + e;
-      }
-    });
-  </script>
+  <header class="titulo">
+    <h1><span class="t-rojo">SUPER</span> AGROBOT</h1>
+    <p class="subtitulo">Mario debe derrotar a todos los Bowsers</p>
+  </header>
+
+  <main class="contenedor">
+    <!-- Columna izquierda: el mundo -->
+    <section class="pantalla">
+      <div class="hud">
+        <div class="hud-item">
+          <span class="hud-etiqueta">ESPADAS</span>
+          <span class="hud-valor"><span id="hud-icono-espada"></span>x<span id="hud-espadas">0</span></span>
+        </div>
+        <div class="hud-item">
+          <span class="hud-etiqueta">PODER</span>
+          <span class="hud-valor"><span id="hud-icono-champinon"></span><span id="hud-combustible">00</span></span>
+        </div>
+        <div class="hud-item">
+          <span class="hud-etiqueta">BOWSERS</span>
+          <span class="hud-valor"><span id="hud-icono-bowser"></span><span id="hud-bowsers">0/0</span></span>
+        </div>
+        <div class="hud-item">
+          <span class="hud-etiqueta">PASO</span>
+          <span class="hud-valor" id="hud-paso">000/000</span>
+        </div>
+      </div>
+
+      <div class="marco-tablero">
+        <canvas id="tablero" width="640" height="640"></canvas>
+        <div id="cartel" class="cartel">
+          <p class="cartel-titulo">PRESS START</p>
+          <p class="cartel-texto">Carga un mundo para comenzar</p>
+        </div>
+      </div>
+
+      <div class="controles-animacion">
+        <button id="btn-pausa" class="boton boton-azul" disabled>❚❚ PAUSA</button>
+        <button id="btn-paso" class="boton boton-azul" disabled>▶❚ PASO</button>
+        <button id="btn-reiniciar" class="boton boton-azul" disabled>↺ REPETIR</button>
+        <label class="velocidad">
+          <span>VEL</span>
+          <input id="velocidad" type="range" min="1" max="10" value="5">
+        </label>
+        <button id="btn-sonido" class="boton boton-gris" aria-pressed="true">♪ ON</button>
+      </div>
+    </section>
+
+    <!-- Columna derecha: panel de control -->
+    <aside class="panel">
+      <section class="caja">
+        <h2 class="caja-titulo">1 · MUNDO</h2>
+        <div class="fila-botones">
+          <button id="btn-archivo" class="boton boton-verde">ABRIR .TXT</button>
+          <button id="btn-ejemplo" class="boton boton-gris">EJEMPLO</button>
+        </div>
+        <p id="nombre-archivo" class="texto-tenue">Ningún mundo cargado</p>
+      </section>
+
+      <section class="caja">
+        <h2 class="caja-titulo">2 · BUSQUEDA</h2>
+        <div class="selector-tipo" role="radiogroup">
+          <label><input type="radio" name="tipo" value="no_informada" checked><span>NO INFORMADA</span></label>
+          <label><input type="radio" name="tipo" value="informada"><span>INFORMADA</span></label>
+        </div>
+        <h2 class="caja-titulo">3 · ALGORITMO</h2>
+        <div id="lista-algoritmos" class="lista-algoritmos" role="radiogroup"></div>
+        <button id="btn-jugar" class="boton boton-rojo boton-grande" disabled>▶ ¡A JUGAR!</button>
+      </section>
+
+      <section class="caja">
+        <h2 class="caja-titulo">REPORTE</h2>
+        <dl id="reporte" class="reporte">
+          <div><dt>Algoritmo</dt><dd id="r-algoritmo">—</dd></div>
+          <div><dt>Nodos expandidos</dt><dd id="r-nodos">—</dd></div>
+          <div><dt>Profundidad</dt><dd id="r-profundidad">—</dd></div>
+          <div><dt>Tiempo</dt><dd id="r-tiempo">—</dd></div>
+          <div id="r-fila-costo" hidden><dt>Costo</dt><dd id="r-costo">—</dd></div>
+        </dl>
+      </section>
+
+      <section class="caja caja-bitacora">
+        <h2 class="caja-titulo">BITACORA</h2>
+        <ol id="bitacora" class="bitacora"></ol>
+      </section>
+
+      <section class="caja">
+        <h2 class="caja-titulo">LEYENDA</h2>
+        <ul id="leyenda" class="leyenda"></ul>
+      </section>
+    </aside>
+  </main>
+
+  <script type="module" src="js/app.js"></script>
 </body>
 </html>

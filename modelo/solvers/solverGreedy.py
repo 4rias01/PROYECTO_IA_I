@@ -29,9 +29,11 @@ class SolverGreedy(Solver):
                 print(f"¡Solución encontrada! Costo total: {nodo.g}")
                 return (nodo.g, nodo.camino())
 
-            if nodo.estado in visitados:
+            # Greedy solo usa heuristica la cual no usa la cant de combustible, entonces podemos usar la clave sin combustible as usual.
+            clave = nodo.estado.clave_sin_combustible()
+            if clave in visitados:
                 continue
-            visitados.add(nodo.estado)
+            visitados.add(clave)
 
             for hijo in self.expandir(nodo):
                 contador += 1

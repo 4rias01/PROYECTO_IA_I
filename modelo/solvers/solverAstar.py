@@ -17,7 +17,7 @@ class SolverAstar(Solver):
         contador = 0
         raiz = Nodo(self.estado_inicial)
         cola = [(self.heuristica(raiz.estado), contador, raiz)]
-        visitados = set()
+        visitados = {} 
 
         while cola:
             _, _, nodo = heapq.heappop(cola)
@@ -27,10 +27,10 @@ class SolverAstar(Solver):
                 print(f"¡Solución encontrada! Costo total: {nodo.g}")
                 return (nodo.g, nodo.camino())
 
-            # Como la heuristica es consistente, la primera vez que sale un estado es con su menor g
-            if nodo.estado in visitados:
+            # Si alguno de los visitados es igual a él pero con igual o mayor
+            # cantidad de combustible, se descarta
+            if self.dominado(visitados, nodo.estado):
                 continue
-            visitados.add(nodo.estado)
 
             for hijo in self.expandir(nodo):
                 contador += 1
